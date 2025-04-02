@@ -2,10 +2,18 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod"
 
-const server = new McpServer({
-  name: "Echo",
-  version: "1.0.0",
-})
+const server = new McpServer(
+  {
+    name: "Echo",
+    version: "1.0.0",
+  },
+  {
+    capabilities: {
+      tools: {},
+      resources: {},
+    },
+  }
+)
 
 server.resource(
   "echo",
@@ -23,6 +31,32 @@ server.resource(
 server.tool("echo", { message: z.string() }, async ({ message }) => ({
   content: [{ type: "text", text: `Tool echo: ${message}` }],
 }))
+
+// Simple tool with parameters
+server.tool(
+  "calculate-bmi",
+  {
+    weightKg: z.number(),
+    heightM: z.number(),
+  },
+  async ({ weightKg, heightM }) => ({
+    content: [
+      {
+        type: "text",
+        text: String(weightKg / (heightM * heightM)),
+      },
+    ],
+  })
+)
+
+// Async tool with external API call
+server.tool("fetch-weather", { city: z.string() }, async ({ city }) => {
+  const response = await fetch(`https://api.weather.com/${city}`)
+  const data = await response.text()
+  return {
+    content: [{ type: "text", text: data }],
+  }
+})
 
 server.prompt("echo", { message: z.string() }, ({ message }) => ({
   messages: [
