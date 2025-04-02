@@ -36,6 +36,13 @@ server.prompt("echo", { message: z.string() }, ({ message }) => ({
   ],
 }))
 
-// stdio transport
-const transport = new StdioServerTransport()
-await server.connect(transport)
+async function main() {
+  // stdio transport
+  const transport = new StdioServerTransport()
+  await server.connect(transport)
+}
+
+main().catch((error) => {
+  console.error("Error starting server: ", error)
+  process.exit(1)
+})
