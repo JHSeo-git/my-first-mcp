@@ -4,7 +4,7 @@ import { z } from "zod"
 
 const server = new McpServer(
   {
-    name: "Echo",
+    name: "my-first-mcp",
     version: "1.0.0",
   },
   {
