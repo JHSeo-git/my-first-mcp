@@ -1,0 +1,27 @@
+FROM oven/bun:1 as builder
+
+WORKDIR /app
+
+# pre-requisites
+RUN bun install -g supergateway
+
+# Copy package files
+COPY package.json ./
+COPY bun.lockb ./
+
+# Install dependencies
+RUN bun install --frozen-lockfile
+
+# Copy application code
+COPY . .
+
+# Build the application
+RUN bun run build
+
+EXPOSE 8000
+
+ENTRYPOINT ["supergateway", \
+    "--stdio", "node dist/index.js", \
+    "--port", "8000", \
+    "--ssePath", "/sse", \
+    "--messagePath", "/message"]
