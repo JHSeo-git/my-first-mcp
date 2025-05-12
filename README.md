@@ -34,6 +34,8 @@ stdio
 
 ```bash
 docker build -t my-first-mcp-stdio .
+# docker build --platform linux/amd64 -t my-first-mcp-stdio .
+# docker buildx build --platform linux/amd64,linux/arm64 -t aoaiaiplayground.azurecr.io/mcp/my-first-mcp-stdio --push .
 docker run -i --rm  my-first-mcp-stdio
 ```
 
