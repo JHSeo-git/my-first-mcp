@@ -16,4 +16,4 @@ COPY . .
 RUN bun run build
 
 # Command will be provided by smithery.yaml
-ENTRYPOINT ["node", "dist/index.js"]
+CMD ["node", "dist/index.js"]

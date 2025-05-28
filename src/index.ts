@@ -70,10 +70,17 @@ server.prompt("echo", { message: z.string() }, ({ message }) => ({
   ],
 }))
 
+console.error("Starting server...")
+
 async function main() {
   // stdio transport
   const transport = new StdioServerTransport()
   await server.connect(transport)
+
+  process.on("SIGINT", async () => {
+    await server.close()
+    process.exit(0)
+  })
 }
 
 main().catch((error) => {
